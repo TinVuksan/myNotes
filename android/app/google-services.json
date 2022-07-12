@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "70040548260",
+    "project_id": "mynotes-flutter-tvuksan",
+    "storage_bucket": "mynotes-flutter-tvuksan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70040548260:android:04b12c08d2e25fa90c0731",
+        "android_client_info": {
+          "package_name": "hr.animsenezdravo.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70040548260-mlkuba3k7u0dmkq91n0hpqbnb5iqqqjc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrTzp7iSggnEY-y7CWEQFKdLlY74iwEIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70040548260-mlkuba3k7u0dmkq91n0hpqbnb5iqqqjc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
