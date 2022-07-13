@@ -1,7 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../firebase_options.dart';
+
 
 
 
@@ -32,79 +32,66 @@ class _RegisterViewState extends State<RegisterView> {
 
    @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:const Text('Register'),
-        ),
-      body: FutureBuilder( 
-
-        future: Firebase.initializeApp( 
-            options:DefaultFirebaseOptions.currentPlatform,
-            ),
-
-        builder: (context, snapshot) {
-          switch(snapshot.connectionState) {
-          
-            case ConnectionState.done:
-              return Column(
-
-           children: [
-            TextField(
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              controller: _email,
-              decoration: const InputDecoration(
-                hintText: 'Enter your email here',
+  return Scaffold(
+    appBar: AppBar(title: const Text('Register'),
+    ),
+    body: Column(
+  
+             children: [
+              TextField(
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                controller: _email,
+                decoration: const InputDecoration(
+                  hintText: 'Enter your email here',
+                ),
               ),
-            ),
-
-            TextField(
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              controller: _password,
-              decoration: const InputDecoration(
-                hintText: 'Enter your password here',
+  
+              TextField(
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                controller: _password,
+                decoration: const InputDecoration(
+                  hintText: 'Enter your password here',
+                ),
               ),
-            ),
-
-             TextButton(
-              onPressed: () async {        
-              final email = _email.text;
-              final password = _password.text;
-              try {
-                final userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: email, 
-                password: password,
-                );
-                print(userCredential);
-              }
-              on FirebaseAuthException catch(e) {
-                if(e.code == "weak-password") {
-                  print("Weak password!");
+  
+               TextButton(
+                onPressed: () async {        
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  final userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: email, 
+                  password: password,
+                  );
+                  print(userCredential);
                 }
-                else if(e.code == "email-already-in-use") {
-                  print("This email is already in use!");
+                on FirebaseAuthException catch(e) {
+                  if(e.code == "weak-password") {
+                    print("Weak password!");
+                  }
+                  else if(e.code == "email-already-in-use") {
+                    print("This email is already in use!");
+                  }
+                  else if(e.code == "invalid-email") {
+                    print("Invalid email - check your email input!");
+                  }
                 }
-                else if(e.code == "invalid-email") {
-                  print("Invalid email - check your email input!");
-                }
-              }
-              
-             },
-             child: const Text('Register'),
-             ),
-           ],
-            );
-          
-              default:
-              return const Text("Loading...");
-          }
-          
-          },
-       )
-    );
+                
+               },
+               child: const Text('Register'),
+               ),
+               TextButton(onPressed: () => {
+                Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false)
+                },
+                child:const Text('Already have an account? Press here to log in!'),
+                ),
+             ],
+    ),
+  );
 
     
   }
