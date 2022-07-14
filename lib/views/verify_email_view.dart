@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
+import '../constants/routes.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
@@ -13,23 +13,40 @@ class VerifyEmailView extends StatefulWidget {
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(title: const Text('Verify email'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Verify email'),
       ),
-      body: Column(children: [
-        const Text("Please verify your email address!"),
-        TextButton(onPressed: () async {
-          final user = FirebaseAuth.instance.currentUser;
-          await user?.sendEmailVerification();
-        }, child: const Text("Send email verification!"),
-        ),
-        TextButton(onPressed: ()  {
-           Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
-        }, child: const Text('Click this to go back to login screen!'),
-        ),
+      body: Column(
+        children: [
+          const Text(
+            "We have sent you an email confirmation for your account!",
+          ),
+          TextButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.currentUser?.delete();
+              if (!mounted) return;
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                registerRoute,
+                (route) => false,
+              );
+            },
+            child: const Text(
+              'Restart the process',
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
+            },
+            child: const Text(
+              'Take me to login screen',
+            ),
+          ),
         ],
-
-        
       ),
     );
   }

@@ -8,23 +8,21 @@ import 'dart:developer' as devtools show log;
 import 'firebase_options.dart';
 import 'views/register_view.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-   
+  runApp(
+    MaterialApp(
       title: 'Flutter Demos',
-      theme: ThemeData.dark(
-        
-      ),
+      theme: ThemeData.dark(),
       home: const HomePage(),
       routes: {
-        notesRoute : (context) => const NotesView(),
+        notesRoute: (context) => const NotesView(),
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
-      }, 
-   ),
-    );
+        verifyEmailRoute: (context) => const VerifyEmailView()
+      },
+    ),
+  );
 }
 
 class HomePage extends StatelessWidget {
@@ -32,39 +30,34 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder( 
-
-        future: Firebase.initializeApp( 
-            options:DefaultFirebaseOptions.currentPlatform,
-            ),
-
-        builder: (context, snapshot) {
-          switch(snapshot.connectionState) {
-          
-            case ConnectionState.done:
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
             final user = FirebaseAuth.instance.currentUser;
-            if(user != null) {
-              if(user.emailVerified) {
+            if (user != null) {
+              if (user.emailVerified) {
                 devtools.log("Test");
                 return const NotesView();
-              }
-             else {
+              } else {
                 devtools.log(FirebaseAuth.instance.currentUser.toString());
                 return const VerifyEmailView();
-            }
-            }
-            else {
+              }
+            } else {
               return const LoginView();
             }
-              default:
-              return const CircularProgressIndicator();
-          }
-          
-          },
-       );
+          default:
+            return const CircularProgressIndicator();
+        }
+      },
+    );
   }
 }
-enum MenuAction {logout}
+
+enum MenuAction { logout }
 
 class NotesView extends StatefulWidget {
   const NotesView({Key? key}) : super(key: key);
@@ -74,88 +67,67 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Main UI'),
         actions: [
-          
-          PopupMenuButton<MenuAction>(onSelected:  (value)  async {
-            switch(value) {
-              
-              case MenuAction.logout:
-                final shouldLogout = await showLogOutDialog(context);
-                
-                if(shouldLogout) {
-                  await FirebaseAuth.instance.signOut();
-                  if(!mounted) return;
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    loginRoute, 
-                    (_) => false,
+          PopupMenuButton<MenuAction>(
+            onSelected: (value) async {
+              switch (value) {
+                case MenuAction.logout:
+                  final shouldLogout = await showLogOutDialog(context);
+
+                  if (shouldLogout) {
+                    await FirebaseAuth.instance.signOut();
+                    if (!mounted) return;
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (_) => false,
                     );
-                }
-              
-            }
-          }, 
+                  }
+              }
+            },
             itemBuilder: (context) {
-              
-            
-            return const [
-               PopupMenuItem<MenuAction>(
-                value: MenuAction.logout, 
-                child: Text('Log out'),
-            ),
-            ];
-            
-          },)
+              return const [
+                PopupMenuItem<MenuAction>(
+                  value: MenuAction.logout,
+                  child: Text('Log out'),
+                ),
+              ];
+            },
+          )
         ],
       ),
-
       body:
-    //  const user = FirebaseAuth.instance.currentUser.displayName ?? "Stranger";
-      const Text(
-        
-        'Hello world !',
-        style:  TextStyle(fontSize: 35)
-        ),
+          //  const user = FirebaseAuth.instance.currentUser.displayName ?? "Stranger";
+          const Text('Hello world !', style: TextStyle(fontSize: 35)),
     );
   }
 }
 
 Future<bool> showLogOutDialog(BuildContext context) {
-return showDialog<bool>(
-  context: context, 
-  builder: (context) {
-    return AlertDialog(
-      title: const Text('Sign out here'),
-      content: const Text('Are you sure you want to sign out?'),
-      actions: [
-        TextButton(
-          onPressed: (() {
-            Navigator.of(context).pop(false);
-          }), 
-          child: const Text('Cancel'),
-        ),
-
-        TextButton(
-          onPressed: (() {
-            Navigator.of(context).pop(true);
-          }), 
-          child: const Text('Log out'),
-        ),
-      ]
-    );
-},
-).then((value) => value ?? false);
-
+  return showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+          title: const Text('Sign out here'),
+          content: const Text('Are you sure you want to sign out?'),
+          actions: [
+            TextButton(
+              onPressed: (() {
+                Navigator.of(context).pop(false);
+              }),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: (() {
+                Navigator.of(context).pop(true);
+              }),
+              child: const Text('Log out'),
+            ),
+          ]);
+    },
+  ).then((value) => value ?? false);
 }
-
-
-
-
-
-
-
