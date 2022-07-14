@@ -11,12 +11,14 @@ import 'views/register_view.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
+   
       title: 'Flutter Demos',
       theme: ThemeData.dark(
         
       ),
       home: const HomePage(),
       routes: {
+        '/notes/' : (context) => const NotesView(),
         '/login/': (context) => const LoginView(),
         '/register/':(context) => const RegisterView(),
       }, 
@@ -42,9 +44,11 @@ class HomePage extends StatelessWidget {
             final user = FirebaseAuth.instance.currentUser;
             if(user != null) {
               if(user.emailVerified) {
+                devtools.log("Test");
                 return const NotesView();
               }
              else {
+                devtools.log(FirebaseAuth.instance.currentUser.toString());
                 return const VerifyEmailView();
             }
             }
@@ -69,19 +73,24 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
+  
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Main UI'),
         actions: [
+          
           PopupMenuButton<MenuAction>(onSelected:  (value)  async {
             switch(value) {
               
               case MenuAction.logout:
                 final shouldLogout = await showLogOutDialog(context);
+                
                 if(shouldLogout) {
                   await FirebaseAuth.instance.signOut();
+                  if(!mounted) return;
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     '/login/', 
                     (_) => false,
@@ -91,6 +100,8 @@ class _NotesViewState extends State<NotesView> {
             }
           }, 
             itemBuilder: (context) {
+              
+            
             return const [
                PopupMenuItem<MenuAction>(
                 value: MenuAction.logout, 
@@ -101,10 +112,13 @@ class _NotesViewState extends State<NotesView> {
           },)
         ],
       ),
-      
-      body: const Text(
-        'Hello world!',
-        style: TextStyle(fontSize: 35)
+
+      body:
+    //  const user = FirebaseAuth.instance.currentUser.displayName ?? "Stranger";
+      const Text(
+        
+        'Hello world !',
+        style:  TextStyle(fontSize: 35)
         ),
     );
   }
