@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/verify_email_view.dart';
-import 'dart:developer' as devtools show log;
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'firebase_options.dart';
 import 'views/register_view.dart';
 
@@ -40,17 +40,16 @@ class HomePage extends StatelessWidget {
             final user = FirebaseAuth.instance.currentUser;
             if (user != null) {
               if (user.emailVerified) {
-                devtools.log("Test");
                 return const NotesView();
               } else {
-                devtools.log(FirebaseAuth.instance.currentUser.toString());
                 return const VerifyEmailView();
               }
             } else {
               return const LoginView();
             }
+
           default:
-            return const CircularProgressIndicator();
+            return Container();
         }
       },
     );
