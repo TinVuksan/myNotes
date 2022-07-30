@@ -77,10 +77,25 @@ class _NotesViewState extends State<NotesView> {
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
+                          return const Center(
+                            child: Text('Testjebemti'),
+                          );
                         case ConnectionState.active:
                           if (snapshot.hasData) {
                             final allNotes =
                                 snapshot.data as List<DatabaseNote>;
+                            if (allNotes.isEmpty) {
+                              return const Center(
+                                child: Text(
+                                  'Try adding a note...',
+                                  style: TextStyle(
+                                    fontFamily: 'Arial',
+                                    color: Color.fromARGB(255, 125, 255, 113),
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              );
+                            }
                             return NotesListView(
                               notes: allNotes,
                               onDeleteNote: (note) async {
