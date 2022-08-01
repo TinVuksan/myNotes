@@ -74,7 +74,7 @@ class _NotesViewState extends State<NotesView> {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return const Center(
-                child: Text('Testneki'),
+                child: CircularProgressIndicator(),
               );
             case ConnectionState.active:
               if (snapshot.hasData) {
