@@ -82,7 +82,7 @@ class _NotesViewState extends State<NotesView> {
                 if (allNotes.isEmpty) {
                   return const Center(
                     child: Text(
-                      'Try adding a note...',
+                      'Nothing to see here...',
                       style: TextStyle(
                         fontFamily: 'Arial',
                         color: Color.fromARGB(255, 125, 255, 113),
